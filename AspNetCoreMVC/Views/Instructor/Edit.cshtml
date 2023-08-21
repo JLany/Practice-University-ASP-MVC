@@ -1,0 +1,15 @@
+﻿@model InstructorDto
+
+@{
+    ViewData["Title"] = "Edit";
+    if (Model == null)
+    {
+        throw new ArgumentNullException(nameof(Model));
+    }
+}
+
+<h1>Edit @Model.Name</h1>
+
+<form method="post" enctype="multipart/form-data" asp-action="Update" asp-route-id="@Model.Id">
+    <partial name="_InstructorEditor" />
+</form>

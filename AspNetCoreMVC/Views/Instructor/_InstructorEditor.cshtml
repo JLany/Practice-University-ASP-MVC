@@ -1,0 +1,39 @@
+﻿@model InstructorDto
+
+@{
+    SelectList courses = new SelectList(ViewBag.Courses,
+        "Id", "Name", Model?.CourseId);
+
+    SelectList departments = new SelectList(ViewBag.Departments,
+        "Id", "Name", Model?.DepartmentId);
+}
+
+<div class="mb-3">
+    <label class="form-label">Name</label>
+    <input name="Name" type="text" class="form-control" asp-for="Name">
+</div>
+<div class="mb-3">
+    <label class="form-label">Address</label>
+    <input name="Address" type="text" class="form-control" asp-for="Address">
+</div>
+<div class="mb-3">
+    <label class="form-label">Salary</label>
+    <input name="Salary" type="number" class="form-control" asp-for="Salary">
+</div>
+<div class="mb-3">
+    <label class="form-label">Course</label><br />
+    <select class="form-select-sm" asp-items="courses" asp-for="CourseId"></select>
+</div>
+<div class="mb-3">
+    <label class="form-label">Department</label><br />
+    <select class="form-select-sm" asp-items="departments" asp-for="DepartmentId"></select>
+</div>
+<div class="mb-3">
+    <label class="form-label">Image</label>
+    <input name="Image" type="file" class="form-control" asp-for="Image">
+</div>
+
+<button type="submit" class="btn btn-primary">Submit</button>
+<a class="btn btn-warning" asp-action="Index">Cancel</a>
+
+<p class="alert-danger">@ViewBag.Error</p>

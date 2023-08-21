@@ -1,0 +1,34 @@
+﻿@model List<CourseResultViewModel>
+
+@{
+    ViewData["Title"] = "Results";
+}
+
+<h1 class="h1">Courses Results</h1>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+
+            <th>Trainee #</th>
+            <th>Name</th>
+            <th>Course</th>
+            <th>Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var result in @Model
+            .OrderBy(r => r.TraineeName)
+            .ThenByDescending(r => r.Score))
+        {
+            <tr>
+                <td>@result.TraineeId</td>
+                <td>@result.TraineeName</td>
+                <td>@result.CourseName</td>
+                <td style="color: @(result.IsSucceeded ? "green" : "red")">@result.Score</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

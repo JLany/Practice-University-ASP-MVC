@@ -1,0 +1,14 @@
+﻿@model InstructorDto?
+
+@{
+    ViewData["Title"] = "New Instructor";
+}
+
+<h1>New Instructor</h1>
+
+<form method="post" asp-action="Create" enctype="multipart/form-data">
+    <partial name="_InstructorEditor" />
+</form>
+
+<p class="alert-danger">@(ViewBag.FileStatus)</p>
+

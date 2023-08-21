@@ -1,0 +1,33 @@
+﻿
+@model Product
+
+<div class="col-md-12 col-lg-4 mb-4 mb-lg-0">
+    <div class="card text-black">
+        <img src="@Model.ImageUri"
+             class="card-img-top" alt="iPhone" />
+        <div class="card-body">
+            <div class="text-center mt-1">
+                <h4 class="card-title">@Model.Name</h4>
+                <h6 class="text-primary mb-1 pb-3">Starting at $@Model.Price</h6>
+            </div>
+
+            <div class="text-center">
+                <div class="p-3 mx-n3 mb-4" style="background-color: #eff1f2;">
+                    <h5 class="mb-0">Quick Look</h5>
+                </div>
+
+                <div class="d-flex flex-column mb-4">
+                    <span class="description">@Model.Description</span>
+                </div>
+
+                <div class="d-flex flex-row">
+                    <a href="/Product/All"> 
+                        <button type="button" class="btn btn-primary flex-fill me-1" data-mdb-ripple-color="dark">
+                            Go Back
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

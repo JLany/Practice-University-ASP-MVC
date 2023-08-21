@@ -1,0 +1,23 @@
+﻿@model Instructor
+
+@{
+    ViewData["Title"] = $"{Model.Name}";
+}
+
+<h1 class="h1">@Model.Name - @Model.Department.Name</h1>
+
+<div class="card" style="width: 40rem;">
+    <img src="@Model.ImageUri" class="card-img-top" alt="@Model.Name" style="padding: 40px">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Name</h5>
+        <p class="card-text">
+            <ul>
+                <li>Teaching: @Model.Course.Name</li>
+                <li>Address: @Model.Address</li>
+                <li>Salary: @Model.Salary.ToString(".00")</li>
+            </ul>
+        </p>
+        <a href="/Instructor" class="btn btn-primary">Go Back</a>
+    </div>
+</div>
+
