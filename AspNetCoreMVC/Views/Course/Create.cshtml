@@ -1,0 +1,37 @@
+﻿@model CourseDto
+
+@{
+    ViewData["Title"] = "New Course";
+
+    var departments = new SelectList(ViewBag.Departments, "Id", "Name");
+}
+
+<h1>New Course</h1>
+
+<form method="post" asp-action="Create">
+    <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input name="Name" class="form-control" asp-for="Name">
+        <span asp-validation-for="Name" class="alert-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Full Mark</label>
+        <input class="form-control" asp-for="FullMark">
+        <span asp-validation-for="FullMark" class="alert-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Success Mark</label>
+        <input class="form-control" asp-for="SuccessMark">
+        <span asp-validation-for="SuccessMark" class="alert-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Department</label><br />
+        <select class="form-select-sm" asp-items="departments" asp-for="DepartmentId"></select>
+        <span asp-validation-for="DepartmentId" class="alert-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a class="btn btn-warning" asp-action="Index">Cancel</a>
+
+</form>
+

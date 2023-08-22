@@ -1,4 +1,6 @@
-﻿namespace AspNetCoreMVC.Models
+﻿using AspNetCoreMVC.Dtos;
+
+namespace AspNetCoreMVC.Models
 {
     public class Course
     {
@@ -12,5 +14,15 @@
 
         public int DepartmentId { get; set; }
         public virtual Department Department { get; set; } = null!;
+
+        public Course() { }
+
+        public Course(CourseDto dto)
+        {
+            Name = dto.Name;
+            FullMark = dto.FullMark;
+            SuccessMark = dto.SuccessMark;
+            DepartmentId = dto.DepartmentId;
+        }
     }
 }

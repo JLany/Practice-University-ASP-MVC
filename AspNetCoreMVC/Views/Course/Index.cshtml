@@ -1,0 +1,35 @@
+﻿@model IEnumerable<AspNetCoreMVC.Dtos.CourseDto>
+
+@{
+    ViewData["Title"] = "Courses";
+}
+
+<h1 class="h1">Courses</h1>
+
+<a class="btn btn-primary" asp-action="Create">Create New</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+
+            <th>Name</th>
+            <th>Mark</th>
+            <th>Pass Mark</th>
+            <th>Department</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var course in @Model
+            .OrderBy(c => c.DepartmentName)
+            .ThenBy(c => c.Name))
+        {
+            <tr>
+                <td>@course.Name</td>
+                <td>@course.FullMark</td>
+                <td>@course.SuccessMark</td>
+                <td>@course.DepartmentName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

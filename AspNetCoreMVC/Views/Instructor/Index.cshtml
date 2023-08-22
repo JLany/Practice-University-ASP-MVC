@@ -50,12 +50,14 @@
     </tbody>
 </table>
 
-<script>
-    function confirmDelete(e) {
-        const isConfirmed = confirm("Are you sure you want to delete this record?");
+@section Scripts {
+    <script>
+        function confirmDelete(e) {
+            const isConfirmed = confirm("Are you sure you want to delete this record?");
 
-        if (!isConfirmed) {
-            e.preventDefault();
+            if (!isConfirmed) {
+                e.preventDefault();
+            }
         }
-    }
-</script>
+    </script>
+}

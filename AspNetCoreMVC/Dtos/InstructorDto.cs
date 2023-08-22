@@ -11,13 +11,16 @@ namespace AspNetCoreMVC.Dtos
         [Required]
         public string Address { get; set; }
         [Required]
+        [DisplayFormat(DataFormatString = "0:C")]
         public decimal Salary { get; set; }
         [Required]
         public int CourseId { get; set; }
         [Required]
         public int DepartmentId { get; set; }
 
-        public IFormFile Image { get; set; }
+        // Nullable here is essential for the ModelState validation 
+        // If not set to nullable, it's as if it's Required.
+        public IFormFile? Image { get; set; }
 
         public InstructorDto()
         {

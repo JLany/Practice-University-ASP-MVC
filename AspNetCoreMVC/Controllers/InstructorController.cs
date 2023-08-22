@@ -5,6 +5,7 @@ using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.Extensions.Caching.Memory;
 using System.Diagnostics.Metrics;
 using System.Net;
 
@@ -12,14 +13,19 @@ namespace AspNetCoreMVC.Controllers
 {
     public class InstructorController : Controller
     {
+        private const string CoursesKey = "courseList";
+
         private readonly MVCUniversityContext _dbContext;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IMemoryCache _cache;
 
         public InstructorController(IUniversityContext dbContext
-            , IWebHostEnvironment webHostEnvironment)
+            , IWebHostEnvironment webHostEnvironment
+            , IMemoryCache cache)
         {
             _dbContext = dbContext as MVCUniversityContext;
             _webHostEnvironment = webHostEnvironment;
+            _cache = cache;
         }
 
         public IActionResult Index()
@@ -42,8 +48,7 @@ namespace AspNetCoreMVC.Controllers
 
         public IActionResult Create()
         {
-            ViewBag.Courses = _dbContext.Courses.ToList();
-            ViewBag.Departments = _dbContext.Departments.ToList();
+            LoadLists();
 
             return View();
         }
@@ -51,18 +56,12 @@ namespace AspNetCoreMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(InstructorDto dto)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    ViewBag.Courses = _dbContext.Courses.ToList();
-            //    ViewBag.Departments = _dbContext.Departments.ToList();
+            if (!ModelState.IsValid)
+            {
+                LoadLists();
 
-            //    var message = string.Join(" | ", ModelState.Values
-            //        .SelectMany(v => v.Errors)
-            //        .Select(e => e.ErrorMessage));
-
-            //    ViewBag.Error = message;
-            //    return View();
-            //}
+                return View(dto);
+            }
 
             string imageUri;
 
@@ -117,28 +116,20 @@ namespace AspNetCoreMVC.Controllers
                 return BadRequest(new { Message = $"No instructor exists with the Id = {id}" });
             }
 
-            ViewBag.Courses = _dbContext.Courses.ToList();
-            ViewBag.Departments = _dbContext.Departments.ToList();
+            LoadLists();
 
             return View(new InstructorDto(editCandidate));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(InstructorDto dto)
+        public async Task<IActionResult> Edit(InstructorDto dto)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    ViewBag.Courses = _dbContext.Courses.ToList();
-            //    ViewBag.Departments = _dbContext.Departments.ToList();
+            if (!ModelState.IsValid)
+            {
+                LoadLists();
 
-            //    var message = string.Join(" | ", ModelState.Values
-            //        .SelectMany(v => v.Errors)
-            //        .Select(e => e.ErrorMessage));
-
-            //    ViewBag.Error = message;
-
-            //    return RedirectToAction("Edit");
-            //}
+                return View(dto);
+            }
 
             Instructor? updateCandidate = await _dbContext.Instructors
                 .FirstOrDefaultAsync(i => i.Id == dto.Id);
@@ -172,11 +163,35 @@ namespace AspNetCoreMVC.Controllers
         }
 
         /// <summary>
+        /// Loads necessary lists for the view to show from Database.
+        /// </summary>
+        private void LoadLists()
+        {
+            ViewBag.Courses = _cache.Get<List<Course>>(CoursesKey);
+
+            if (ViewBag.Courses is null)
+            {
+                ViewBag.Courses = _dbContext.Courses.ToList();
+                _cache.Set(CoursesKey, 
+                    (List<Course>)ViewBag.Courses, TimeSpan.FromDays(1));
+            }
+
+            ViewBag.Departments = _cache.Get<List<Department>>(GlobalConfig.DepartmentListCacheKey);
+
+            if (ViewBag.Departments is null)
+            {
+                ViewBag.Departments = _dbContext.Departments.ToList();
+                _cache.Set(GlobalConfig.DepartmentListCacheKey, 
+                    (List<Department>)ViewBag.Departemnts, TimeSpan.FromDays(1));
+            }
+        }
+
+        /// <summary>
         /// Save image to wwwroot path.
         /// </summary>
         /// <param name="image"></param>
         /// <returns>The relative path to the saved image in wwwroot.</returns>
-        private async Task<string> SaveImageToStorageAsync(IFormFile image)
+        private async Task<string> SaveImageToStorageAsync(IFormFile? image)
         {
             var imageUri = "";
 

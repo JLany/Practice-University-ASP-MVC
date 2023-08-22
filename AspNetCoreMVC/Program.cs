@@ -14,7 +14,8 @@ namespace AspNetCoreMVC
 
 			builder.Services
 				.AddSingleton<ProductRepository>()
-				.AddSingleton<IUniversityContext, MVCUniversityContext>();
+				.AddSingleton<IUniversityContext, MVCUniversityContext>()
+				.AddMemoryCache();
 
 			var app = builder.Build();
 
