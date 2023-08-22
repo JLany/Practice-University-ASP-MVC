@@ -1,3 +1,4 @@
+using AspNetCoreMVC.Attributes;
 using AspNetCoreMVC.Data;
 using AspNetCoreMVC.Models;
 
@@ -15,7 +16,8 @@ namespace AspNetCoreMVC
 			builder.Services
 				.AddSingleton<ProductRepository>()
 				.AddSingleton<IUniversityContext, MVCUniversityContext>()
-				.AddMemoryCache();
+				.AddMemoryCache()
+				.AddScoped<UniqueCourseAttribute>();
 
 			var app = builder.Build();
 

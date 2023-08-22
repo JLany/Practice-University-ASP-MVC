@@ -67,6 +67,41 @@ namespace AspNetCoreMVC.Controllers
             return View(results);
         }
 
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult VerifyName(string name, int departmentId)
+        {
+            if (_dbContext.Courses
+                .Include(c => c.Department)
+                .Any(c => c.Name == name && c.DepartmentId == departmentId))
+            {
+                return Json($"A Course with the name \"{name}\" already exists in this department.");
+            }
+
+            return Json(true);
+        }
+
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult VerifyFullMark(double fullMark)
+        {
+            if (fullMark == 100 || fullMark == 150 || fullMark == 200)
+            {
+                return Json(true);
+            }
+
+            return Json("Full Mark should be one of the following: (100 | 150 | 200).");
+        }
+
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult VerifySuccessMark(double successMark, double fullMark) 
+        {
+            if (successMark > fullMark || successMark < 20)
+            {
+                return Json("Success Mark should be between 20 and Full Mark.");
+            }
+
+            return Json(true);
+        }
+
         /// <summary>
         /// Loads necessary lists for the view to show from Database.
         /// </summary>
